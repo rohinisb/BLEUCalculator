@@ -45,6 +45,16 @@ def compute_clipped_count(candidate_count, references_count):
     return clipped_count
 
 
+def best_length_match(candidate_length, ref_length):
+    least_diff = abs(candidate_length - ref_length[0])
+    best = ref_length[0]
+    for ref in ref_length:
+        if abs(candidate_length-ref) < least_diff:
+            least_diff = abs(candidate_length - ref)
+            best = ref
+    return best
+
+
 def compute_ngram_precision(candidate_list, reference_list, n):
     clipped_count = 0
     count = 0
@@ -66,6 +76,8 @@ def compute_ngram_precision(candidate_list, reference_list, n):
         candidate_word_count, ngram_len = compute_word_count(words, n, candidate_word_count)
         clipped_count += compute_clipped_count(candidate_word_count, reference_word_count)
         count += ngram_len
+        ref += best_length_match(len(words), reference_length)
+        cand += len(words)
 
 
 def main():
