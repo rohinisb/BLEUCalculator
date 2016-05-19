@@ -55,6 +55,14 @@ def best_length_match(candidate_length, ref_length):
     return best
 
 
+def brevity_penalty(cand, ref):
+    if cand > ref:
+        b_penalty = 1
+    else:
+        b_penalty = math.exp(1-(float(ref)/cand))
+    return b_penalty
+
+
 def compute_ngram_precision(candidate_list, reference_list, n):
     clipped_count = 0
     count = 0
@@ -78,6 +86,12 @@ def compute_ngram_precision(candidate_list, reference_list, n):
         count += ngram_len
         ref += best_length_match(len(words), reference_length)
         cand += len(words)
+    if clipped_count == 0:
+        precision = 0
+    else:
+        precision = float(clipped_count) / count
+    b_penalty = brevity_penalty(cand, ref)
+    return precision, b_penalty
 
 
 def main():
