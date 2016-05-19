@@ -32,6 +32,20 @@ def compute_word_count(words, n, dic):
     return dic, ngram_len
 
 
+def compute_clipped_count(candidate_count, references_count):
+    clipped_count = 0
+    for ngram in candidate_count.keys():
+        ngram_count = candidate_count[ngram]
+        max_count = 0
+        for ref in references_count:
+            if ngram in ref:
+                max_count = max(max_count, ref[ngram])
+        ngram_count = min(ngram_count, max_count)
+        clipped_count += ngram_count
+    # print clipped_count
+    return clipped_count
+
+
 def compute_ngram_precision(candidate_list, reference_list, n):
     clipped_count = 0
     count = 0
@@ -51,6 +65,8 @@ def compute_ngram_precision(candidate_list, reference_list, n):
         candidate_word_count = dict()
         words = cand_sentence.strip().split()
         candidate_word_count, ngram_len = compute_word_count(words, n, candidate_word_count)
+        clipped_count += compute_clipped_count(candidate_word_count, reference_word_count)
+        count += ngram_len
 
 
 def main():
