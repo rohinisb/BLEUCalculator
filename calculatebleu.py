@@ -101,6 +101,9 @@ def main():
     for i in range(4):
         pr, bp = compute_ngram_precision(cand, ref, i+1)
         precision.append(pr)
+    score = (reduce(operator.mul, precision)) ** (1.0 / len(precision)) * bp
+    print score
+    out.write(str(score))
 
 
 main()
