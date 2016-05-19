@@ -42,7 +42,6 @@ def compute_clipped_count(candidate_count, references_count):
                 max_count = max(max_count, ref[ngram])
         ngram_count = min(ngram_count, max_count)
         clipped_count += ngram_count
-    # print clipped_count
     return clipped_count
 
 
